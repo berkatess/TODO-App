@@ -4,52 +4,46 @@ import androidx.annotation.NonNull;
 import androidx.appcompat.app.AppCompatActivity;
 
 import android.content.Intent;
-import android.content.SharedPreferences;
-import android.icu.text.SimpleDateFormat;
 import android.os.Bundle;
 import android.view.Menu;
 import android.view.MenuInflater;
 import android.view.MenuItem;
+import android.view.View;
+import android.widget.Button;
 import android.widget.EditText;
 
-import java.sql.Date;
-import java.sql.Time;
-import java.util.Locale;
-
-public class NewActivity extends AppCompatActivity {
+public class AddActivity extends AppCompatActivity {
 
 
-
+    Button save_button;
     EditText title,time,description;
 
     @Override
     protected void onCreate (Bundle savedInstanceState) {
         super.onCreate( savedInstanceState );
-        setContentView( R.layout.activity_new );
-        getSupportActionBar().setTitle( " " );
+        setContentView( R.layout.activity_add );
 
 
 
-        title = (EditText) findViewById( R.id.title );
-        description = (EditText) findViewById( R.id.description );
-        time = (EditText) findViewById( R.id.time );
 
-
-    }
-
-    private void SaveText(String data, String currentTime){
-
-
-
-        SharedPreferences sharedPreferences = getSharedPreferences( "MySharedPref",MODE_PRIVATE );
-        SharedPreferences.Editor editor = sharedPreferences.edit();
-        editor.putString( "title",data );
-        editor.putString( "description",data );
-        editor.putString( "time",currentTime );
-
+        title = (EditText) findViewById( R.id.title_input );
+        description = (EditText) findViewById( R.id.description_input );
+        time = (EditText) findViewById( R.id.time_input );
+        save_button = findViewById(R.id.save_button);
+        save_button.setOnClickListener( new View.OnClickListener() {
+            @Override
+            public void onClick (View view) {
+                DatabaseHelper myDB = new DatabaseHelper( AddActivity.this);
+                myDB.addBook(title.getText().toString().trim(),
+                        description.getText().toString().trim(),
+                        Integer.valueOf(time.getText().toString().trim()));
+            }
+        } );
 
 
     }
+
+
 
 
 

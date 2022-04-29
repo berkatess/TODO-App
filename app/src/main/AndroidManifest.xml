@@ -10,7 +10,7 @@
         android:supportsRtl="true"
         android:theme="@style/Theme.Reminder">
         <activity
-            android:name=".NewActivity"
+            android:name=".AddActivity"
             android:exported="false" />
         <activity
             android:name=".MainActivity"

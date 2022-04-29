@@ -1,28 +1,36 @@
 package com.example.reminder;
 
-import androidx.annotation.NonNull;
+import androidx.appcompat.app.AlertDialog;
 import androidx.appcompat.app.AppCompatActivity;
-import androidx.drawerlayout.widget.DrawerLayout;
+import androidx.recyclerview.widget.LinearLayoutManager;
+import androidx.recyclerview.widget.RecyclerView;
 
+import android.content.DialogInterface;
 import android.content.Intent;
-import android.content.res.Configuration;
+import android.database.Cursor;
 import android.os.Bundle;
 import android.view.Menu;
 import android.view.MenuInflater;
 import android.view.MenuItem;
 import android.view.View;
-import android.view.Window;
-import android.view.WindowManager;
-import android.widget.LinearLayout;
-import android.widget.Toast;
-import androidx.appcompat.widget.Toolbar;
-import androidx.fragment.app.Fragment;
+import android.widget.ImageView;
+import android.widget.TextView;
 
-import com.google.android.material.navigation.NavigationView;
+import com.google.android.material.floatingactionbutton.FloatingActionButton;
 
-import java.util.Locale;
+import java.util.ArrayList;
 
 public class MainActivity extends AppCompatActivity {
+
+
+    RecyclerView recyclerView;
+    FloatingActionButton add_button;
+
+    DatabaseHelper myDatabase;
+    ArrayList<String> TODO_id, TODO_title, TODO_description, TODO_times;
+    ImageView empty_imageview;
+    TextView no_data;
+    CustomAdapter customAdapter;
 
 
 
@@ -32,7 +40,47 @@ public class MainActivity extends AppCompatActivity {
         setContentView( R.layout.activity_main );
        getSupportActionBar().setTitle( " " );
 
+       empty_imageview = findViewById( R.id.empty_imageview );
+       no_data =findViewById( R.id.no_data );
 
+        recyclerView = findViewById(R.id.recyclerView);
+        add_button = findViewById(R.id.add_button);
+
+        add_button.setOnClickListener( new View.OnClickListener() {
+            @Override
+            public void onClick (View view) {
+                Intent intent = new Intent(MainActivity.this, AddActivity.class);
+                startActivity(intent);
+            }
+        } );
+
+        myDatabase = new DatabaseHelper(MainActivity.this);
+        TODO_id = new ArrayList<>();
+        TODO_title = new ArrayList<>();
+        TODO_description = new ArrayList<>();
+        TODO_times = new ArrayList<>();
+        storeDataInArrays();
+        customAdapter = new CustomAdapter(MainActivity.this,this, TODO_id, TODO_title, TODO_description, TODO_times);
+        recyclerView.setAdapter(customAdapter);
+        recyclerView.setLayoutManager(new LinearLayoutManager(MainActivity.this));
+
+    }
+
+    void storeDataInArrays(){
+        Cursor cursor = myDatabase.readAllData();
+        if(cursor.getCount() == 0){
+            empty_imageview.setVisibility(View.VISIBLE);
+            no_data.setVisibility(View.VISIBLE);
+        }else{
+            while (cursor.moveToNext()){
+                TODO_id.add(cursor.getString(0));
+                TODO_title.add(cursor.getString(1));
+                TODO_description.add(cursor.getString(2));
+                TODO_times.add(cursor.getString(3));
+            }
+            empty_imageview.setVisibility(View.GONE);
+            no_data.setVisibility(View.GONE);
+        }
     }
 
 
@@ -45,19 +93,36 @@ public class MainActivity extends AppCompatActivity {
     }
 
 
-
     @Override
-    public boolean onOptionsItemSelected (@NonNull MenuItem item) {
-
-        Intent intent_newPage = new Intent(this, NewActivity.class);
-
-        switch (item.getItemId()) {
-            case R.id.new_todo:
-                startActivity(intent_newPage);
-                break;
-
+    public boolean onOptionsItemSelected(MenuItem item) {
+        if(item.getItemId() == R.id.delete_all){
+            confirmDialog();
         }
         return super.onOptionsItemSelected(item);
     }
 
+
+    void confirmDialog(){
+        AlertDialog.Builder builder = new AlertDialog.Builder(this);
+        builder.setTitle("Delete All?");
+        builder.setMessage("Are you sure you want to delete all Data?");
+        builder.setPositiveButton("Yes", new DialogInterface.OnClickListener() {
+            @Override
+            public void onClick(DialogInterface dialogInterface, int i) {
+                DatabaseHelper myDB = new DatabaseHelper(MainActivity.this);
+                myDB.deleteAllData();
+                //Refresh Activity
+                Intent intent = new Intent(MainActivity.this, MainActivity.class);
+                startActivity(intent);
+                finish();
+            }
+        });
+        builder.setNegativeButton("No", new DialogInterface.OnClickListener() {
+            @Override
+            public void onClick(DialogInterface dialogInterface, int i) {
+
+            }
+        });
+        builder.create().show();
+    }
 }

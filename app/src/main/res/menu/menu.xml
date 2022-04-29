@@ -3,16 +3,12 @@
 
 <group>
 
-    <item android:id="@+id/new_todo"
-          android:title="New"
-        android:icon="@drawable/menuicon"
-        />
 
-    <item android:id="@+id/delete_todo"
-          android:title="Delete"/>
 
-    <item android:id="@+id/edit_todo"
-        android:title="Edit"/>
+    <item android:id="@+id/delete_all"
+          android:title="Delete All"/>
+
+
 
 </group>
 
