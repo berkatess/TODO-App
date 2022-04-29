@@ -1,6 +1,7 @@
 package com.example.reminder;
 
 import androidx.annotation.NonNull;
+import androidx.appcompat.app.ActionBar;
 import androidx.appcompat.app.AppCompatActivity;
 
 import android.content.Intent;
@@ -41,31 +42,6 @@ public class AddActivity extends AppCompatActivity {
         } );
 
 
-    }
-
-
-
-
-
-    @Override
-    public boolean onCreateOptionsMenu (Menu menu){
-
-        MenuInflater inflater = getMenuInflater();
-        inflater.inflate( R.menu.menu2, menu );
-        return super.onCreateOptionsMenu( menu );
-    }
-    @Override
-    public boolean onOptionsItemSelected (@NonNull MenuItem item) {
-
-        Intent intent = new Intent(this, MainActivity.class);
-
-        switch (item.getItemId()) {
-            case R.id.return_item:
-                startActivity(intent);
-                break;
-
-        }
-        return super.onOptionsItemSelected(item);
     }
 
 

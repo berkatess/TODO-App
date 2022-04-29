@@ -1,5 +1,6 @@
 package com.example.reminder;
 
+import androidx.annotation.Nullable;
 import androidx.appcompat.app.AlertDialog;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.recyclerview.widget.LinearLayoutManager;
@@ -59,11 +60,21 @@ public class MainActivity extends AppCompatActivity {
         TODO_title = new ArrayList<>();
         TODO_description = new ArrayList<>();
         TODO_times = new ArrayList<>();
+
         storeDataInArrays();
+
         customAdapter = new CustomAdapter(MainActivity.this,this, TODO_id, TODO_title, TODO_description, TODO_times);
         recyclerView.setAdapter(customAdapter);
         recyclerView.setLayoutManager(new LinearLayoutManager(MainActivity.this));
 
+    }
+
+    @Override
+    protected void onActivityResult(int requestCode, int resultCode, @Nullable Intent data) {
+        super.onActivityResult(requestCode, resultCode, data);
+        if(requestCode == 1){
+            recreate();
+        }
     }
 
     void storeDataInArrays(){
@@ -109,9 +120,9 @@ public class MainActivity extends AppCompatActivity {
         builder.setPositiveButton("Yes", new DialogInterface.OnClickListener() {
             @Override
             public void onClick(DialogInterface dialogInterface, int i) {
-                DatabaseHelper myDB = new DatabaseHelper(MainActivity.this);
-                myDB.deleteAllData();
-                //Refresh Activity
+                DatabaseHelper myDatabase = new DatabaseHelper(MainActivity.this);
+                myDatabase.deleteAllData();
+
                 Intent intent = new Intent(MainActivity.this, MainActivity.class);
                 startActivity(intent);
                 finish();

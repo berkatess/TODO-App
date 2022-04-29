@@ -54,8 +54,8 @@ public class CustomAdapter extends RecyclerView.Adapter<CustomAdapter.MyViewHold
                 Intent intent = new Intent(context, UpdateActivity.class);
                 intent.putExtra("id", String.valueOf(reminder_id.get(position)));
                 intent.putExtra("title", String.valueOf(reminder_title.get(position)));
-                intent.putExtra("author", String.valueOf(reminder_description.get(position)));
-                intent.putExtra("pages", String.valueOf(reminder_times.get(position)));
+                intent.putExtra("description", String.valueOf(reminder_description.get(position)));
+                intent.putExtra("times", String.valueOf(reminder_times.get(position)));
                 activity.startActivityForResult(intent, 1);
             }
         });
