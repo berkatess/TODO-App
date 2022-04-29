@@ -38,6 +38,9 @@ public class AddActivity extends AppCompatActivity {
                 myDB.addBook(title.getText().toString().trim(),
                         description.getText().toString().trim(),
                         Integer.valueOf(time.getText().toString().trim()));
+                Intent intent = new Intent(view.getRootView().getContext(), MainActivity.class);
+                startActivity(intent);
+                finish();
             }
         } );
 

@@ -1,6 +1,7 @@
 package com.example.reminder;
 
 import android.content.DialogInterface;
+import android.content.Intent;
 import android.os.Bundle;
 import android.util.Log;
 import android.view.View;
@@ -16,7 +17,7 @@ import androidx.appcompat.app.AppCompatActivity;
 public class UpdateActivity extends AppCompatActivity {
 
     EditText title_input, description_input, times_input;
-    Button update_button, delete_button;
+    Button update_button;
 
     String id, title, description, times;
 
@@ -29,7 +30,8 @@ public class UpdateActivity extends AppCompatActivity {
         description_input = findViewById(R.id.description_input2);
         times_input = findViewById(R.id.times_input2);
         update_button = findViewById(R.id.update_button);
-        delete_button = findViewById(R.id.delete_button);
+
+//        delete_button = findViewById(R.id.delete_button);
 
 
         getAndSetIntentData();
@@ -49,15 +51,18 @@ public class UpdateActivity extends AppCompatActivity {
                 description = description_input.getText().toString().trim();
                 times = times_input.getText().toString().trim();
                 myDatabase.updateData(id, title, description, times);
+                Intent intent = new Intent(view.getRootView().getContext(), MainActivity.class);
+                startActivity(intent);
+                finish();
             }
         } );
 
-        delete_button.setOnClickListener( new View.OnClickListener() {
-            @Override
-            public void onClick (View view) {
-                confirmDialog();
-            }
-        } );
+//        delete_button.setOnClickListener( new View.OnClickListener() {
+//            @Override
+//            public void onClick (View view) {
+//                confirmDialog();
+//            }
+//        } );
 
     }
     void getAndSetIntentData(){
@@ -79,26 +84,26 @@ public class UpdateActivity extends AppCompatActivity {
         }
     }
 
-    void confirmDialog(){
-        AlertDialog.Builder builder = new AlertDialog.Builder(this);
-        builder.setTitle("Delete " + title + " ?");
-        builder.setMessage("Are you sure you want to delete " + title + " ?");
-        builder.setPositiveButton("Yes", new DialogInterface.OnClickListener() {
-            @Override
-            public void onClick(DialogInterface dialogInterface, int i) {
-                DatabaseHelper myDatabase = new DatabaseHelper(UpdateActivity.this);
-                myDatabase.deleteOneRow(id);
-                finish();
-            }
-        });
-        builder.setNegativeButton("No", new DialogInterface.OnClickListener() {
-            @Override
-            public void onClick(DialogInterface dialogInterface, int i) {
-
-            }
-        });
-        builder.create().show();
-    }
+//    void confirmDialog(){
+//        AlertDialog.Builder builder = new AlertDialog.Builder(this);
+//        builder.setTitle("Delete " + title + " ?");
+//        builder.setMessage("Are you sure you want to delete " + title + " ?");
+//        builder.setPositiveButton("Yes", new DialogInterface.OnClickListener() {
+//            @Override
+//            public void onClick(DialogInterface dialogInterface, int i) {
+//                DatabaseHelper myDatabase = new DatabaseHelper(UpdateActivity.this);
+//                myDatabase.deleteOneRow(id);
+//                finish();
+//            }
+//        });
+//        builder.setNegativeButton("No", new DialogInterface.OnClickListener() {
+//            @Override
+//            public void onClick(DialogInterface dialogInterface, int i) {
+//
+//            }
+//        });
+//        builder.create().show();
+//    }
 }
 
 
